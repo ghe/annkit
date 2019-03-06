@@ -1,18 +1,18 @@
 /******************************************************************************
  * ANNKit is a platform independent C++ implementation of a 3 layer
  * neural net trained by back propagation.
- * 
+ *
  * Copyright of Gerry Ens and GoWest Robotics. www.GoWestRobotics.com
- * You are free to use, alter and redistribute this code for all non-commercial 
+ * You are free to use, alter and redistribute this code for all non-commercial
  * purposes. Commercial use is also allowed under these conditions:
  * 1) Notify the author by email at: Gerry@GoWestRobotics.com
- * 2) Include this header intact somewhere in any file using all or part of 
- *    this code 
+ * 2) Include this header intact somewhere in any file using all or part of
+ *    this code
  * 3) Clearly mark any modifications to this code
- *****************************************************************************/ 
-#include "neuron.h"
-#include "synapse.h"
-#include "math.h"
+ *****************************************************************************/
+#include "Neuron.h"
+#include "Synapse.h"
+#include <math.h>
 
 CNeuron::CNeuron(void)
 : m_dValue(0)
@@ -47,7 +47,7 @@ void CNeuron::Calculate(void)
       pSynapse = (CSynapse *)(*it);
       dTotal += pSynapse->GetValue();
    }
-   
+
    //sigmoid squashing, don't calculate > 50 or < -50
    if (dTotal > 50) m_dValue = 1;
    else if (dTotal < -50) m_dValue = 0;
@@ -71,13 +71,13 @@ void CNeuron::CalcError()
 
    //multiply raw error by derivative of squashing sigmoid
    double dError = m_dValue * (1-m_dValue)* m_dRawError;
-   
+
    //have all inputs put their piece of this error back onto their source nodes
    for (it = m_vInputs.begin(); it != m_vInputs.end(); it++)
    {
       pSynapse = (CSynapse *)(*it);
       pSynapse->PropDownError(dError);
-   } 
+   }
    //reset raw error
    m_dRawError = 0;
 }
